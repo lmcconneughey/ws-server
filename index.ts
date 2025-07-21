@@ -2,6 +2,7 @@ import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import { Server } from 'socket.io';
+import { v4 as uuidv4 } from 'uuid';
 
 const app = express();
 app.use(cors());
@@ -43,6 +44,15 @@ io.on('connection', (socket) => {
 	});
 	socket.on('disconnect', () => {
 		removeUser(socket.id);
+	});
+
+	socket.on('sendNotification', ({ receiverUsername, data }) => {
+		const receiver = getUser(receiverUsername);
+		if (!receiver) throw new Error('No such user');
+		io.to(receiver?.socketId).emit('getNotification', {
+			id: uuidv4(),
+			...data,
+		});
 	});
 });
 
