@@ -3,9 +3,17 @@ import http from 'http';
 import cors from 'cors';
 import { Server } from 'socket.io';
 import { v4 as uuidv4 } from 'uuid';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(
+	cors({
+		origin: process.env.CLIENT_ORIGIN,
+		methods: ['GET', 'POST'],
+	})
+);
 
 let onlineUsers: Array<{ username: string; socketId: string }> = [];
 
@@ -31,11 +39,16 @@ const getUser = (username: string) => {
 
 	return data;
 };
-
 const server = http.createServer(app);
+
+const allowedOrigins =
+	process.env.NODE_ENV === 'production'
+		? ['https://post-ez.vercel.app']
+		: ['http://localhost:3000'];
+
 const io = new Server(server, {
 	cors: {
-		origin: '*', // replace with your frontend URL on production
+		origin: allowedOrigins, // replace with your frontend URL on production
 		methods: ['GET', 'POST'],
 	},
 });
@@ -64,7 +77,6 @@ io.on('connection', (socket) => {
 		});
 	});
 });
-console.log(onlineUsers);
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
