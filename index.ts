@@ -86,13 +86,16 @@ io.on('connection', (socket) => {
 	});
 });
 
-const PORT = process.env.PORT;
-if (!PORT) {
-	console.error('SERVER ERROR: PORT environment variable is missing.');
+const PORT_STR = process.env.PORT; // string or undefined
+const PORT_LISTEN = PORT_STR ? parseInt(PORT_STR, 10) : 8080; //Convert string to number, fallback to 8080
+
+if (isNaN(PORT_LISTEN) || PORT_LISTEN <= 0) {
+	console.error('SERVER ERROR: Invalid PORT value detected. Exiting.');
 	process.exit(1);
 }
 
-server.listen(PORT, () => {
-	console.log(`SERVER: WebSocket server running on port ${PORT}`);
+server.listen(PORT_LISTEN, '0.0.0.0', () => {
+	// Bind to 0.0.0.0
+	console.log(`SERVER: WebSocket server running on port ${PORT_LISTEN}`);
 	console.log(`SERVER: CORS allowed from: ${clientFrontendUrl}`);
 });
