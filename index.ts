@@ -24,9 +24,9 @@ const addUser = (username: string, socketId: string) => {
 
 	if (!isExist) {
 		onlineUsers.push({ username, socketId });
-		console.log(`User: ${username} added!`);
+		console.log(`SERVER User: ${username} added!`);
 	} else {
-		console.log(`User: ${username} already exists!`);
+		console.log(`SERVER User: ${username} already exists!`);
 	}
 };
 // remove logged out users
@@ -50,21 +50,31 @@ const io = new Server(server, {
 });
 
 io.on('connection', (socket) => {
-	console.log('New client connected:', socket.id);
+	console.log('SERVER New client connected:', socket.id);
+	socket.on('error', (error) => {
+		console.error('SERVER: Socket error for ID', socket.id, ':', error);
+	});
 
 	socket.on('newUser', (username) => {
 		console.log(`Registering new user: ${username}, socket: ${socket.id}`);
 		addUser(username, socket.id);
 		console.log('Online users array:', onlineUsers);
 	});
-	socket.on('disconnect', () => {
+	socket.on('disconnect', (reason) => {
+		console.log(
+			'SERVER: Client disconnected. Socket ID:',
+			socket.id,
+			'Reason:',
+			reason
+		);
+
 		removeUser(socket.id);
 	});
 
 	socket.on('sendNotification', ({ receiverUsername, data }) => {
 		const receiver = getUser(receiverUsername);
 		if (!receiver) {
-			console.warn(`No such user: ${receiverUsername}`);
+			console.warn(`SERVER: No such user: ${receiverUsername}`);
 			return;
 		}
 		io.to(receiver?.socketId).emit('getNotification', {
@@ -76,5 +86,6 @@ io.on('connection', (socket) => {
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
-	console.log(`WebSocket server running on http://localhost:${PORT}`);
+	console.log(`SERVER: WebSocket server running on http://localhost:${PORT}`);
+	console.log(`SERVER: CORS allowed from: ${clientFrontendUrl}`);
 });
