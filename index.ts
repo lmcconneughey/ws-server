@@ -85,7 +85,7 @@ io.on('connection', (socket) => {
 	});
 });
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT;
 if (!PORT) {
 	console.error('SERVER ERROR: PORT environment variable is missing.');
 	process.exit(1);
