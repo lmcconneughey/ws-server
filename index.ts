@@ -8,7 +8,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
-const clientFrontendUrl = process.env.CLIENT_ORIGIN || 'http://localhost:3001';
+const clientFrontendUrl = process.env.CLIENT_ORIGIN;
 app.use(
 	cors({
 		origin: clientFrontendUrl,
@@ -84,8 +84,7 @@ io.on('connection', (socket) => {
 	});
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
-	console.log(`SERVER: WebSocket server running on http://localhost:${PORT}`);
 	console.log(`SERVER: CORS allowed from: ${clientFrontendUrl}`);
 });
