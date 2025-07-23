@@ -85,6 +85,12 @@ io.on('connection', (socket) => {
 });
 
 const PORT = process.env.PORT || 8080;
+if (!PORT) {
+	console.error('SERVER ERROR: PORT environment variable is missing.');
+	process.exit(1);
+}
+
 server.listen(PORT, () => {
+	console.log(`SERVER: WebSocket server running on port ${PORT}`);
 	console.log(`SERVER: CORS allowed from: ${clientFrontendUrl}`);
 });
