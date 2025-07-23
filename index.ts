@@ -46,8 +46,9 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
 	cors: {
-		origin: clientFrontendUrl, // replace with your frontend URL on production
+		origin: [clientFrontendUrl], // replace with your frontend URL on production
 		methods: ['GET', 'POST'],
+		credentials: true,
 	},
 });
 
