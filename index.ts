@@ -8,7 +8,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
-const clientFrontendUrl = process.env.CLIENT_ORIGIN || 'http://localhost:3001';
+const clientFrontendUrl =
+	process.env.CLIENT_ORIGIN || 'https://post-ez.vercel.app';
 app.use(
 	cors({
 		origin: clientFrontendUrl,
