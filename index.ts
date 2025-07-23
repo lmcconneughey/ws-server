@@ -8,7 +8,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
-const clientFrontendUrl = process.env.CLIENT_ORIGIN;
+const clientFrontendUrl = process.env.CLIENT_ORIGIN || 'http://localhost:3001';
 app.use(
 	cors({
 		origin: clientFrontendUrl,
