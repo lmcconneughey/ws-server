@@ -4,8 +4,9 @@ import cors from 'cors';
 import { Server } from 'socket.io';
 import { v4 as uuidv4 } from 'uuid';
 import dotenv from 'dotenv';
+import path from 'path';
 
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const app = express();
 const clientFrontendUrl =
