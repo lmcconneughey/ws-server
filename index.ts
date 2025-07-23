@@ -8,9 +8,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
+const clientFrontendUrl =
+	process.env.CLIENT_FRONTEND_URL || 'http://localhost:3001';
 app.use(
 	cors({
-		origin: process.env.CLIENT_ORIGIN,
+		origin: clientFrontendUrl,
 		methods: ['GET', 'POST'],
 	})
 );
@@ -41,14 +43,9 @@ const getUser = (username: string) => {
 };
 const server = http.createServer(app);
 
-const allowedOrigins =
-	process.env.NODE_ENV === 'production'
-		? ['https://post-ez.vercel.app']
-		: ['http://localhost:3000'];
-
 const io = new Server(server, {
 	cors: {
-		origin: allowedOrigins, // replace with your frontend URL on production
+		origin: clientFrontendUrl, // replace with your frontend URL on production
 		methods: ['GET', 'POST'],
 	},
 });
