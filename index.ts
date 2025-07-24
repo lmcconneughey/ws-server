@@ -94,7 +94,7 @@ if (isNaN(PORT_LISTEN) || PORT_LISTEN <= 0) {
 	console.error('SERVER ERROR: Invalid PORT value detected. Exiting.');
 	process.exit(1);
 }
-
+// fix: correct Railway networking port from 3001 to 8080 for WebSocket routing
 server.listen(PORT_LISTEN, '0.0.0.0', () => {
 	// Bind to 0.0.0.0
 	console.log(`SERVER: WebSocket server running on port ${PORT_LISTEN}`);
